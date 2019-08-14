@@ -59,7 +59,7 @@ exports.cssLoaders = function (options) {
     css: generateLoaders(),
     postcss: generateLoaders(),
     less: generateLoaders('less'),
-    sass: generateLoaders('sass', { indentedSyntax: true }),
+    sass: generateLoaders('sass', {indentedSyntax: true}),
     scss: generateLoaders('sass'),
     stylus: generateLoaders('stylus'),
     styl: generateLoaders('stylus')
@@ -98,4 +98,47 @@ exports.createNotifierCallback = () => {
       icon: path.join(__dirname, 'logo.png')
     })
   }
+}
+var glob = require('glob')
+var HtmlWebpackPlugin = require('html-webpack-plugin')  //对每个页面单独打包生成一个新页面的插件
+var PAGE_PATH = path.resolve(__dirname, '../src/pages')
+var merge = require('webpack-merge')
+
+//多入口配置
+exports.entries = function () {
+  var entryFiles = glob.sync(PAGE_PATH + '/*/*.js')
+  var map = {}
+  entryFiles.forEach((filePath) => {
+    var filename = filePath.substring(filePath.lastIndexOf('\/') + 1, filePath.lastIndexOf('.'))
+    map[filename] = filePath
+  })
+  return map
+}
+
+//多页面输出配置
+exports.htmlPlugin = function () {
+  let entryHtml = glob.sync(PAGE_PATH + '/*/*.html')
+  let arr = []
+  entryHtml.forEach((filePath) => {
+    let filename = filePath.substring(filePath.lastIndexOf('\/') + 1, filePath.lastIndexOf('.'))
+    let conf = {
+      template: filePath,
+      filename: filename + '.html',
+      chunks: [filename],
+      inject: true
+    }
+    if (process.env.NODE_ENV === 'production') {
+      conf = merge(conf, {
+        chunks: ['manifest', 'vendor', filename],
+        minify: {
+          removeComments: true,
+          collapseWhitespace: true,
+          removeAttributeQuotes: true
+        },
+        chunksSortMode: 'dependency'
+      })
+    }
+    arr.push(new HtmlWebpackPlugin(conf))
+  })
+  return arr
 }
