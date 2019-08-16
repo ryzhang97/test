@@ -1,6 +1,4 @@
 export default {
-  // url: 'https://xcx.51mcr.com'
-  url: 'http://192.168.1.175:9091',
   convertHtmlToText: function convertHtmlToText (inputText) {
     if (!inputText) {
       return ''
