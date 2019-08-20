@@ -1,0 +1,48 @@
+.v-tables {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+table, th, tr, td {
+  border: 1px solid #f0f0f0;
+}
+
+th {
+  height: 40px;
+  text-align: left;
+  font-size: 12pt;
+}
+
+th div {
+  display: flex;
+  align-items: center;
+  color: #757395;
+  font-size: 10pt;
+}
+
+.i-icon {
+  width: 20px;
+  height: 20px;
+  margin: 0 10px 0 10px;
+  vertical-align: middle;
+}
+
+table {
+  width: calc(100% - 2px);
+  border-collapse: collapse;
+  border-spacing: 0;
+  background: white;
+}
+
+tr {
+  width: 100%;
+}
+
+td {
+  width: 33%;
+  height: 30px;
+  text-align: center;
+  color: #cccccc;
+  font-size: 9pt;
+}
